@@ -8,9 +8,9 @@ RESET_DURATION = 0.3  # in seconds
 GRID_POS = [0.15, 0.5, 0.85]  # gird scaling
 OFFSET_DEF_ZOOM = 0.16  # find pixel
 RETINA_FACTOR = 2  # for MacBook
-CROSS_COLOUR = '545454'
-CIRCLE_COLOR = 'F1EBD5'
-GREEN_COLOR = '57BAAC'
+CROSS_COLOUR = (84, 84, 84)  # 545454
+CIRCLE_COLOR = (241, 235, 213)  # F1EBD5
+BG_COLOUR = (87, 186, 172)  # 57BAAC
 
 
 def main():
@@ -67,7 +67,29 @@ def main():
     boardCoord = [[(coord / RETINA_FACTOR - offset) for coord in sublist]
                   for sublist in boardCoord]
 
+    ag.click(boardCoord[0][0], boardCoord[0][1])
+    time.sleep(1)
+    ag.click(boardCoord[1][0], boardCoord[1][1])
+
     # main loop
+    region = [coord / RETINA_FACTOR for coord in board]
+    pix_circle = ag.pixel(boardCoord[0][0], boardCoord[0][1])
+    print(pix_circle)
+    print(CIRCLE_COLOR)
+    pix_cross = ag.pixel(boardCoord[1][0], boardCoord[1][1])
+    print(pix_cross)
+    print(CROSS_COLOUR)
+    pix_empty = ag.pixel(boardCoord[2][0], boardCoord[2][1])
+    print(pix_empty)
+    print(BG_COLOUR)
+    if pix_circle == CIRCLE_COLOR:
+        print("found circle")
+    if pix_cross == CROSS_COLOUR:
+        print("found cross")
+    if pix_empty == BG_COLOUR:
+        print("found background")
+    sys.exit(0)
+
     while 1:
         rand = random.randint(0, len(boardCoord) - 1)
         ag.click(boardCoord[rand][0], boardCoord[rand][1])
