@@ -6,7 +6,8 @@ import random
 
 RESET_DURATION = 0.3  # in seconds
 GRID_POS = [0.15, 0.5, 0.85]  # gird scaling
-OFFSET_PIXEL = 0.33  # find pixel
+OFFSET_DEF_ZOOM = 0.16  # find pixel
+RETINA_FACTOR = 2  # for MacBook
 CROSS_COLOUR = '545454'
 CIRCLE_COLOR = 'F1EBD5'
 GREEN_COLOR = '57BAAC'
@@ -61,19 +62,10 @@ def main():
             board.top + board.height * GRID_POS[2]]
     ]
 
-    # offset
-    offset = board.width * OFFSET_PIXEL
-
-    boardCoord = [[coord / 2 for coord in sublist]
+    # adjust for retina / add offset
+    offset = (board.width / RETINA_FACTOR) / 3 * OFFSET_DEF_ZOOM
+    boardCoord = [[(coord / RETINA_FACTOR - offset) for coord in sublist]
                   for sublist in boardCoord]
-
-    # for c in boardCoord:
-    #     ag.moveTo(c[0], c[1])
-    # sys.exit(0)
-
-    # TL 330 455, BL 330 518, TR 393 455
-    # 375, 475
-    # 93-74,
 
     # main loop
     while 1:
