@@ -5,20 +5,61 @@ import random
 
 ag.FAILSAFE = True
 
-RESET_DURATION = 0.3  # in seconds
-BUFFER_DURATION = 0.18  # in seconds
+RESET_DURATION = 0.30  # in seconds
+BUFFER_DURATION = 0.20  # in seconds
 GRID_POS = [0.15, 0.5, 0.85]  # gird scaling
 OFFSET_DEF_ZOOM = 0.35  # find pixel
-RETINA_FACTOR = 2  # for MacBook
+RETINA_FACTOR = 2.0  # for MacBook
 CROSS_COLOUR = (84, 84, 84, 255)  # 545454
 CIRCLE_COLOR = (241, 235, 213, 255)  # F1EBD5
 BG_COLOUR = (87, 186, 172, 255)  # 57BAAC
 
 
-def matchPix(pixel_1, pixel_2, tolerance=0):
+def matchPix(pixel_1: tuple[int, ...],
+             pixel_2: tuple[int, ...],
+             tolerance=0) -> bool:
     r, g, b = pixel_1[:3]
     exR, exG, exB = pixel_2[:3]
-    return (abs(r - exR) <= tolerance) and (abs(g - exG) <= tolerance) and (abs(b - exB) <= tolerance)
+    return (
+        (abs(r - exR) <= tolerance)
+        and (abs(g - exG) <= tolerance)
+        and (abs(b - exB) <= tolerance)
+    )
+
+
+def getBoard(board: list[list[float]]) -> list[str]:
+    # pixel match test
+    im = ag.screenshot()
+    board_array = []
+    # update function to not take a million screenshot every loop
+    for coord in board:
+        pix = im.getpixel((coord[0], coord[1]))
+        if (matchPix(pix, CIRCLE_COLOR, 10)):
+            board_array.append('o')
+            continue
+        if (matchPix(pix, CROSS_COLOUR, 10)):
+            board_array.append('x')
+            continue
+        if (matchPix(pix, BG_COLOUR, 10)):
+            board_array.append('_')
+            continue
+        print("error reading board")
+        return []
+
+    if (len(board_array) == 9):
+        return board_array
+    else:
+        print("error reading board")
+        return []
+
+
+def printBoard(board: list[list[float]]):
+    if len(board) != 9:
+        print("corrupted board")
+        return
+    print(board[0], board[1], board[2])
+    print(board[3], board[4], board[5])
+    print(board[6], board[7], board[8])
 
 
 def main():
@@ -27,9 +68,9 @@ def main():
     except ag.ImageNotFoundException:
         print("restart button not found on screen.")
         sys.exit(0)
-    restartCoord = [coord / RETINA_FACTOR for coord in restartButt]
 
-    # focus and reset board
+    # adjust scaling and reset board
+    restartCoord = [coord / RETINA_FACTOR for coord in restartButt]
     ag.doubleClick(restartCoord[0], restartCoord[1])
     time.sleep(RESET_DURATION)
 
@@ -70,9 +111,9 @@ def main():
             board.top + board.height * GRID_POS[2]]
     ]
 
-    # adjust for retina / add offset
+    # offset is for pixel matching, factor for retina screens
     offset = (board.width / RETINA_FACTOR) / 3 * OFFSET_DEF_ZOOM
-    boardWithFactor = [[(coord - offset) for coord in sublist]  # for pixel matching
+    boardWithFactor = [[(coord - offset) for coord in sublist]
                        for sublist in boardCoord]
     boardCoord = [[(coord / RETINA_FACTOR) for coord in sublist]
                   for sublist in boardCoord]
@@ -89,31 +130,10 @@ def main():
     ag.click(boardCoord[7][0], boardCoord[7][1])
     time.sleep(BUFFER_DURATION)
 
-    # pixel match test
-    im = ag.screenshot()
-    current = []
-    # update function to not take a million screenshot every loop
-    for coord in boardWithFactor:
-        pix = im.getpixel((coord[0], coord[1]))
-        if (matchPix(pix, CIRCLE_COLOR, 10)):
-            current.append("o")
-            continue
-        if (matchPix(pix, CROSS_COLOUR, 10)):
-            current.append("x")
-            continue
-        if (matchPix(pix, BG_COLOUR, 10)):
-            current.append("_")
-            continue
-        print("error reading board")
+    while 1:
+        board_now = getBoard(boardWithFactor)
+        printBoard(board_now)
         sys.exit(0)
-
-        if (len(current) == 9):
-            print(current[0], current[1], current[2])
-            print(current[3], current[4], current[5])
-            print(current[6], current[7], current[8])
-        else:
-            print("error reading board")
-            sys.exit(0)
 
     while 1:
         rand = random.randint(0, len(boardCoord) - 1)
