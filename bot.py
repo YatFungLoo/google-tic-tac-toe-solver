@@ -3,15 +3,22 @@ import time
 import sys
 import random
 
+ag.FAILSAFE = True
 
 RESET_DURATION = 0.3  # in seconds
-BUFFER_DURATION = 0.2  # in seconds
+BUFFER_DURATION = 0.18  # in seconds
 GRID_POS = [0.15, 0.5, 0.85]  # gird scaling
 OFFSET_DEF_ZOOM = 0.35  # find pixel
 RETINA_FACTOR = 2  # for MacBook
-CROSS_COLOUR = (84, 84, 84)  # 545454
-CIRCLE_COLOR = (241, 235, 213)  # F1EBD5
-BG_COLOUR = (87, 186, 172)  # 57BAAC
+CROSS_COLOUR = (84, 84, 84, 255)  # 545454
+CIRCLE_COLOR = (241, 235, 213, 255)  # F1EBD5
+BG_COLOUR = (87, 186, 172, 255)  # 57BAAC
+
+
+def matchPix(pixel_1, pixel_2, tolerance=0):
+    r, g, b = pixel_1[:3]
+    exR, exG, exB = pixel_2[:3]
+    return (abs(r - exR) <= tolerance) and (abs(g - exG) <= tolerance) and (abs(b - exB) <= tolerance)
 
 
 def main():
@@ -82,27 +89,31 @@ def main():
     ag.click(boardCoord[7][0], boardCoord[7][1])
     time.sleep(BUFFER_DURATION)
 
-    # main loop
-    # region = [coord / RETINA_FACTOR for coord in board]
-
+    # pixel match test
+    im = ag.screenshot()
     current = []
+    # update function to not take a million screenshot every loop
     for coord in boardWithFactor:
-        if (ag.pixelMatchesColor(coord[0], coord[1], CIRCLE_COLOR, tolerance=10)):
+        pix = im.getpixel((coord[0], coord[1]))
+        if (matchPix(pix, CIRCLE_COLOR, 10)):
             current.append("o")
             continue
-        if (ag.pixelMatchesColor(coord[0], coord[1], CROSS_COLOUR, tolerance=10)):
+        if (matchPix(pix, CROSS_COLOUR, 10)):
             current.append("x")
             continue
-        if (ag.pixelMatchesColor(coord[0], coord[1], BG_COLOUR, tolerance=10)):
+        if (matchPix(pix, BG_COLOUR, 10)):
             current.append("_")
             continue
         print("error reading board")
         sys.exit(0)
 
-    print(current[0], current[1], current[2])
-    print(current[3], current[4], current[5])
-    print(current[6], current[7], current[8])
-    sys.exit(0)
+        if (len(current) == 9):
+            print(current[0], current[1], current[2])
+            print(current[3], current[4], current[5])
+            print(current[6], current[7], current[8])
+        else:
+            print("error reading board")
+            sys.exit(0)
 
     while 1:
         rand = random.randint(0, len(boardCoord) - 1)
