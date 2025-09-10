@@ -27,7 +27,7 @@ def matchPix(pixel_1: tuple[int, ...],
     )
 
 
-def getBoard(board: list[list[float]]) -> list[str]:
+def getBoard(board: list[list[float]]) -> list[list[str]]:
     # pixel match test
     im = ag.screenshot()
     board_array = []
@@ -47,19 +47,19 @@ def getBoard(board: list[list[float]]) -> list[str]:
         return []
 
     if (len(board_array) == 9):
-        return board_array
+        matrix_form = []
+        row = 3
+        for i in range(0, len(board_array), row):
+            matrix_form.append(board_array[i:i + row])
+        return matrix_form
     else:
         print("error reading board")
         return []
 
 
 def printBoard(board: list[list[float]]):
-    if len(board) != 9:
-        print("corrupted board")
-        return
-    print(board[0], board[1], board[2])
-    print(board[3], board[4], board[5])
-    print(board[6], board[7], board[8])
+    for row in board:
+        print(row[0], row[1], row[2])
 
 
 def main():
@@ -129,11 +129,11 @@ def main():
     time.sleep(BUFFER_DURATION)
     ag.click(boardCoord[7][0], boardCoord[7][1])
     time.sleep(BUFFER_DURATION)
+    # end test
 
-    while 1:
-        board_now = getBoard(boardWithFactor)
-        printBoard(board_now)
-        sys.exit(0)
+    board_now = getBoard(boardWithFactor)
+    printBoard(board_now)
+    sys.exit(0)
 
     while 1:
         rand = random.randint(0, len(boardCoord) - 1)
