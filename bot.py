@@ -5,7 +5,7 @@ import random
 
 ag.FAILSAFE = True
 
-RESET_DURATION = 0.30  # in seconds
+RESET_DURATION = 0.40  # in seconds
 BUFFER_DURATION = 0.20  # in seconds
 GRID_POS = [0.15, 0.5, 0.85]  # gird scaling
 OFFSET_DEF_ZOOM = 0.35  # find pixel
@@ -13,6 +13,34 @@ RETINA_FACTOR = 2.0  # for MacBook
 CROSS_COLOUR = (84, 84, 84, 255)  # 545454
 CIRCLE_COLOR = (241, 235, 213, 255)  # F1EBD5
 BG_COLOUR = (87, 186, 172, 255)  # 57BAAC
+
+PLAYER_CHAR = 'x'
+OPP_CHAR = 'o'
+EMPTY_CHAR = '_'
+WIN_CONDITIONS = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+    [0, 4, 8], [2, 4, 6]
+]
+SCORE_WIN = 10
+SCORE_LOSE = -10
+SCORE_DRAW = 0
+
+
+def evalBoard(board: list[int]) -> int:
+    for condition in WIN_CONDITIONS:
+        c1, c2, c3 = condition
+        if board[c1] == board[c2] == board[c3] and board[c1] != '_':
+            if board[c1] == PLAYER_CHAR:
+                print("player win")
+                return SCORE_WIN
+            elif board[c1] == OPP_CHAR:
+                print("player win")
+                return SCORE_LOSE
+
+    if '_' not in board:
+        return SCORE_DRAW
+    return None
 
 
 def matchPix(pixel_1: tuple[int, ...],
@@ -27,7 +55,7 @@ def matchPix(pixel_1: tuple[int, ...],
     )
 
 
-def getBoard(board: list[list[float]]) -> list[list[str]]:
+def getBoard(board: list[float]) -> list[str]:
     # pixel match test
     im = ag.screenshot()
     board_array = []
@@ -47,19 +75,19 @@ def getBoard(board: list[list[float]]) -> list[list[str]]:
         return []
 
     if (len(board_array) == 9):
-        matrix_form = []
-        row = 3
-        for i in range(0, len(board_array), row):
-            matrix_form.append(board_array[i:i + row])
-        return matrix_form
+        return board_array
     else:
         print("error reading board")
         return []
 
 
-def printBoard(board: list[list[float]]):
-    for row in board:
-        print(row[0], row[1], row[2])
+def printBoard(board: list[float]):
+    if len(board) != 9:
+        print("corrupted board")
+        return
+    print(board[0], board[1], board[2])
+    print(board[3], board[4], board[5])
+    print(board[6], board[7], board[8])
 
 
 def main():
@@ -129,10 +157,16 @@ def main():
     time.sleep(BUFFER_DURATION)
     ag.click(boardCoord[7][0], boardCoord[7][1])
     time.sleep(BUFFER_DURATION)
+    ag.click(boardCoord[5][0], boardCoord[5][1])
+    time.sleep(BUFFER_DURATION)
+    ag.click(boardCoord[8][0], boardCoord[8][1])
+    time.sleep(BUFFER_DURATION)
     # end test
 
     board_now = getBoard(boardWithFactor)
     printBoard(board_now)
+    evalBoard(board_now)
+
     sys.exit(0)
 
     while 1:
