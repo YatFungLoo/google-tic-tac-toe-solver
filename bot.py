@@ -33,41 +33,53 @@ SCORE_DRAW = 0
 
 
 def evalBoard(board: list[int]) -> int:
+    """This function assumes player is always using PLAYER_CHAR
+
+    evalulate board state and return scores
+    """
     for condition in WIN_CONDITIONS:
         c1, c2, c3 = condition
         if board[c1] == board[c2] == board[c3] and board[c1] != '_':
             if board[c1] == PLAYER_CHAR:
                 if __debug__:
-                    print("player win")
+                    print("Player win")
                 return SCORE_WIN
             elif board[c1] == OPP_CHAR:
                 if __debug__:
-                    print("player lose")
+                    print("Opponent win")
                 return SCORE_LOSE
 
     if '_' not in board:
         if __debug__:
-            print("game draw")
+            print("Game draw")
         return SCORE_DRAW
 
     if __debug__:
-        print("game ongoing")
+        print("Game ongoing")
     return None
 
 
-def minimax(board: list[int], max_depth: int, maximiser_turn: bool) -> int:
+def minimax(board: list[int], maximiser_turn: bool, max_depth=10) -> int:
+    """Returns best possible score for player
+
+    Args:
+        maximiser_turn
+        true -> best score for x
+        false -> best score of o
+    """
+    if __debug__:
+        print("----------------")
+
     score = evalBoard(board)
 
     if __debug__:
-        print("----------------")
         if maximiser_turn:
-            print("Is maxer")
+            print("Player:\t", PLAYER_CHAR)
         else:
-            print("Is not maxer")
-        print("max_depth", max_depth)
-        print("score", score)
+            print("Player:\t", OPP_CHAR)
+        print("Depth:\t", max_depth)
+        print("Score:\t", score)
         printBoard(board)
-        breakpoint()
         print("----------------")
 
     if max_depth == 0 or score is not None:
@@ -79,7 +91,7 @@ def minimax(board: list[int], max_depth: int, maximiser_turn: bool) -> int:
             if board[move] is EMPTY_CHAR:
                 copy_board = copy.deepcopy(board)
                 copy_board[move] = PLAYER_CHAR
-                score = minimax(copy_board, max_depth-1, False)
+                score = minimax(copy_board, False, max_depth-1)
                 best_score = max(score, best_score)
         return best_score
 
@@ -89,7 +101,7 @@ def minimax(board: list[int], max_depth: int, maximiser_turn: bool) -> int:
             if board[move] is EMPTY_CHAR:
                 copy_board = copy.deepcopy(board)
                 copy_board[move] = OPP_CHAR
-                score = minimax(copy_board, max_depth-1, True)
+                score = minimax(copy_board, True, max_depth-1)
                 best_score = min(score, best_score)
         return best_score
 
@@ -197,49 +209,22 @@ def main():
     boardCoord = [[(coord / RETINA_FACTOR) for coord in sublist]
                   for sublist in boardCoord]
 
-    # # test (cross win board)
-    # ag.click(boardCoord[0][0], boardCoord[0][1])
-    # time.sleep(BUFFER_DURATION)
-    # ag.click(boardCoord[1][0], boardCoord[1][1])
-    # time.sleep(BUFFER_DURATION)
-    # ag.click(boardCoord[4][0], boardCoord[4][1])
-    # time.sleep(BUFFER_DURATION)
-    # ag.click(boardCoord[6][0], boardCoord[6][1])
-    # time.sleep(BUFFER_DURATION)
-    # ag.click(boardCoord[7][0], boardCoord[7][1])
-    # time.sleep(BUFFER_DURATION)
-    # ag.click(boardCoord[5][0], boardCoord[5][1])
-    # time.sleep(BUFFER_DURATION)
-    # ag.click(boardCoord[3][0], boardCoord[3][1])
-    # time.sleep(BUFFER_DURATION)
-    # # ag.click(boardCoord[2][0], boardCoord[2][1])
-    # # time.sleep(BUFFER_DURATION)
-    # # end test
-
-    # test (draw board)
+    # test (cross win board)
     ag.click(boardCoord[0][0], boardCoord[0][1])
     time.sleep(BUFFER_DURATION)
     ag.click(boardCoord[1][0], boardCoord[1][1])
     time.sleep(BUFFER_DURATION)
-    ag.click(boardCoord[2][0], boardCoord[2][1])
-    time.sleep(BUFFER_DURATION)
     ag.click(boardCoord[4][0], boardCoord[4][1])
-    time.sleep(BUFFER_DURATION)
-    ag.click(boardCoord[5][0], boardCoord[5][1])
-    time.sleep(BUFFER_DURATION)
-    ag.click(boardCoord[8][0], boardCoord[8][1])
-    time.sleep(BUFFER_DURATION)
-    ag.click(boardCoord[3][0], boardCoord[3][1])
     time.sleep(BUFFER_DURATION)
     ag.click(boardCoord[6][0], boardCoord[6][1])
     time.sleep(BUFFER_DURATION)
+    ag.click(boardCoord[7][0], boardCoord[7][1])
+    time.sleep(BUFFER_DURATION)
+    ag.click(boardCoord[5][0], boardCoord[5][1])
+    time.sleep(BUFFER_DURATION)
     # end test
 
-    board_now = getBoard(boardWithFactor)
-    printBoard(board_now)
-    hi = minimax(board_now, 10, False)
-    print(hi)
-
+    print(minimax(getBoard(boardWithFactor), True))
     sys.exit(0)
 
     while 1:
