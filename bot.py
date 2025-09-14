@@ -3,7 +3,6 @@ import copy
 import math
 import sys
 import time
-import random
 
 ag.FAILSAFE = True
 
@@ -104,6 +103,23 @@ def minimax(board: list[int], maximiser_turn: bool, max_depth=10) -> int:
                 score = minimax(copy_board, True, max_depth-1)
                 best_score = min(score, best_score)
         return best_score
+
+
+def bestMove(board: list[int]) -> int:
+    best_score = -math.inf
+    best_move = -1
+
+    for move in POSSIBLE_MOVES:
+        if board[move] is EMPTY_CHAR:
+            copy_board = copy.deepcopy(board)
+            copy_board[move] = PLAYER_CHAR
+            score = minimax(copy_board, False)
+
+            if score > best_score:
+                best_score = score
+                best_move = move
+
+    return best_move
 
 
 def matchPix(pixel_1: tuple[int, ...],
@@ -209,27 +225,13 @@ def main():
     boardCoord = [[(coord / RETINA_FACTOR) for coord in sublist]
                   for sublist in boardCoord]
 
-    # test (cross win board)
-    ag.click(boardCoord[0][0], boardCoord[0][1])
-    time.sleep(BUFFER_DURATION)
-    ag.click(boardCoord[1][0], boardCoord[1][1])
-    time.sleep(BUFFER_DURATION)
-    ag.click(boardCoord[4][0], boardCoord[4][1])
-    time.sleep(BUFFER_DURATION)
-    ag.click(boardCoord[6][0], boardCoord[6][1])
-    time.sleep(BUFFER_DURATION)
-    ag.click(boardCoord[7][0], boardCoord[7][1])
-    time.sleep(BUFFER_DURATION)
-    ag.click(boardCoord[5][0], boardCoord[5][1])
-    time.sleep(BUFFER_DURATION)
-    # end test
+    for i in range(0, 6):
+        time.sleep(2)
+        m = bestMove(getBoard(boardWithFactor))
+        ag.click(boardCoord[m][0], boardCoord[m][1])
+        time.sleep(2)
 
-    print(minimax(getBoard(boardWithFactor), True))
     sys.exit(0)
-
-    while 1:
-        rand = random.randint(0, len(boardCoord) - 1)
-        ag.click(boardCoord[rand][0], boardCoord[rand][1])
 
 
 if __name__ == "__main__":
