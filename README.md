@@ -1,22 +1,26 @@
 # Google Tic Tac Toe Solver
 
 - [Google Tic Tac Toe Solver](#google-tic-tac-toe-solver)
+  - [Prefix](#prefix)
   - [Minimax Algorithm](#minimax-algorithm)
-  - [Core Idea](#core-idea)
-  - [Payoff Matrix](#payoff-matrix)
-  - [what to do next](#what-to-do-next)
+  - [In Layman's Term](#in-laymen-term)
+  - [What To Do Next](#what-to-do-next)
   - [References](#references)
-  - [How to run the code](#how-to-run-the-code)
+  - [How To Run The Code](#how-to-run-the-code)
 
-doing some stuff with pyautogui
+## Prefix
 
-Trying to beat this one ->
-[https://share.google/QIVITPPSO41av2jKh](https://share.google/QIVITPPSO41av2jKh)
+This code reliably beats and draw
+[Google's search page Tic Tac Toe web game](https://share.google/QIVITPPSO41av2jKh),
+using pyautogui for mouse movement and Minimax algorithm to calculate the moves.
+
+> due to pyautogui limitations, remember to recapture board, restart button and
+> adjust `RETINA_FACTOR` for the code to work properly.
 
 ## Minimax Algorithm
 
-this works because tic tac toe is a zero-sum game, only two player, gain of one
-player equals to the loss of the other.
+Tic Tac Toe is a two player zero-sum game, gain of one player must equals to the
+loss of the other.
 
 strategic form triplet($X$, $Y$, $A$)
 
@@ -39,27 +43,24 @@ representing the winnings of Player 1 and losses of Player 2.
 
 (too much maths man)
 
-## Core Idea
+## In Layman's Term
 
-Two Player game, I want to maximise the score while opponent wants to minimise
-the score.
+Two Player game, maximise player's score while opponent minimise opponent's
+score.
 
-3 possible state:
+The board can be in 3 possible state:
 
-1. If I got opps -> +10
-2. If opps caught me -> -10
-3. Draw / in the middle of the game -> 0
+1. If player wins -> $+10$
+2. If opponent wins -> $-10$
+3. Draw / in the middle of the game -> $0$
 
-Before every move, play a move and simulate all the possible moves of the game
-and determine which resulting state it will land and compare the score.
+Before every move, simulate the game by playing a move and then simulate all the
+possible possible moves of the game and determine which resulting state it will
+land and compare the score.
 
-## Payoff Matrix
+The first move with the best score will be the move to play next.
 
-9 squares takes 4 plays to justify winning strategies. The strategic form
-representing the game as a matrix in a table form, assuming both players select
-strategies before the game is played using those strategies in turn.
-
-## what to do next
+## What To Do Next
 
 1. Add alpha-beta pruning (still deterministic, brute-force)
 2. monte carlo tree search (probabilistic)
@@ -69,8 +70,7 @@ strategies before the game is played using those strategies in turn.
 
 1. [https://muens.io/minimax-and-mcts/](https://muens.io/minimax-and-mcts/)
 
-
-## How to run the code
+## How To Run The Code
 
 1. screen capture the board
 2. install requirements

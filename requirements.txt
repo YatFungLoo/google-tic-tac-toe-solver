@@ -1,0 +1,67 @@
+# Name                    Version                   Build  Channel
+astroid                   3.3.11                   pypi_0    pypi
+autopep8                  2.0.4                    pypi_0    pypi
+black                     25.1.0                   pypi_0    pypi
+bzip2                     1.0.8                h80987f9_6  
+ca-certificates           2025.7.15            hca03da5_0  
+click                     8.2.1                    pypi_0    pypi
+dill                      0.4.0                    pypi_0    pypi
+docstring-to-markdown     0.17                     pypi_0    pypi
+expat                     2.7.1                h313beb8_0  
+flake8                    7.1.2                    pypi_0    pypi
+importlib-metadata        8.7.0                    pypi_0    pypi
+isort                     6.0.1                    pypi_0    pypi
+jedi                      0.19.2                   pypi_0    pypi
+libcxx                    20.1.8               h8869778_0  
+libffi                    3.4.4                hca03da5_1  
+libmpdec                  4.0.0                h80987f9_0  
+mccabe                    0.7.0                    pypi_0    pypi
+mouseinfo                 0.1.3                    pypi_0    pypi
+mpmath                    1.3.0                    pypi_0    pypi
+mypy-extensions           1.1.0                    pypi_0    pypi
+ncurses                   6.5                  hee39554_0  
+numpy                     2.2.6                    pypi_0    pypi
+opencv-python             4.12.0.88                pypi_0    pypi
+openssl                   3.0.17               h4ee41c1_0  
+packaging                 25.0                     pypi_0    pypi
+parso                     0.8.5                    pypi_0    pypi
+pathspec                  0.12.1                   pypi_0    pypi
+pillow                    11.3.0                   pypi_0    pypi
+pip                       25.2               pyhc872135_0  
+platformdirs              4.4.0                    pypi_0    pypi
+pluggy                    1.6.0                    pypi_0    pypi
+pyautogui                 0.9.54                   pypi_0    pypi
+pycodestyle               2.12.1                   pypi_0    pypi
+pydocstyle                6.3.0                    pypi_0    pypi
+pyflakes                  3.2.0                    pypi_0    pypi
+pygetwindow               0.0.9                    pypi_0    pypi
+pylint                    3.3.8                    pypi_0    pypi
+pymsgbox                  1.0.9                    pypi_0    pypi
+pyobjc-core               11.1                     pypi_0    pypi
+pyobjc-framework-cocoa    11.1                     pypi_0    pypi
+pyobjc-framework-quartz   11.1                     pypi_0    pypi
+pyperclip                 1.9.0                    pypi_0    pypi
+pyrect                    0.2.0                    pypi_0    pypi
+pyscreeze                 1.0.1                    pypi_0    pypi
+python                    3.13.5          h2eb94d5_100_cp313  
+python_abi                3.13                    0_cp313  
+pytoolconfig              1.3.1                    pypi_0    pypi
+pytweening                1.2.0                    pypi_0    pypi
+readline                  8.3                  h0b18652_0  
+rope                      1.14.0                   pypi_0    pypi
+rubicon-objc              0.5.2                    pypi_0    pypi
+setuptools                78.1.1          py313hca03da5_0  
+snowballstemmer           3.0.1                    pypi_0    pypi
+sqlite                    3.50.2               h79febb2_1  
+sympy                     1.14.0                   pypi_0    pypi
+tk                        8.6.15               hcd8a7d5_0  
+tomlkit                   0.13.3                   pypi_0    pypi
+typing-extensions         4.15.0                   pypi_0    pypi
+tzdata                    2025b                h04d1e81_0  
+ujson                     5.11.0                   pypi_0    pypi
+whatthepatch              1.0.7                    pypi_0    pypi
+wheel                     0.45.1          py313hca03da5_0  
+xz                        5.6.4                h80987f9_1  
+yapf                      0.43.0                   pypi_0    pypi
+zipp                      3.23.0                   pypi_0    pypi
+zlib                      1.2.13               h18a0788_1  
