@@ -162,11 +162,10 @@ def getBoard(board: list[float]) -> list[str]:
 
 def printBoard(board: list[float]):
     if len(board) != 9:
-        print("corrupted board")
+        print("Incomplete board")
         return
-    print(board[0], board[1], board[2])
-    print(board[3], board[4], board[5])
-    print(board[6], board[7], board[8])
+    for i in range(0, 7, 3):
+        print(board[i + 0], board[i + 1], board[i + 2])
 
 
 def main():
@@ -197,26 +196,13 @@ def main():
         sys.exit(0)
 
     # row major
-    boardCoord = [
-        [board.left + board.width * GRID_POS[0],
-            board.top + board.height * GRID_POS[0]],
-        [board.left + board.width * GRID_POS[1],
-            board.top + board.height * GRID_POS[0]],
-        [board.left + board.width * GRID_POS[2],
-            board.top + board.height * GRID_POS[0]],
-        [board.left + board.width * GRID_POS[0],
-            board.top + board.height * GRID_POS[1]],
-        [board.left + board.width * GRID_POS[1],
-            board.top + board.height * GRID_POS[1]],
-        [board.left + board.width * GRID_POS[2],
-            board.top + board.height * GRID_POS[1]],
-        [board.left + board.width * GRID_POS[0],
-            board.top + board.height * GRID_POS[2]],
-        [board.left + board.width * GRID_POS[1],
-            board.top + board.height * GRID_POS[2]],
-        [board.left + board.width * GRID_POS[2],
-            board.top + board.height * GRID_POS[2]]
-    ]
+    boardCoord = []
+    for i in range(0, 3):
+        for j in range(0, 3):
+            boardCoord.append(
+                [board.left + board.width * GRID_POS[j],
+                    board.top + board.height * GRID_POS[i]],
+            )
 
     # offset is for pixel matching, factor for retina screens
     offset = (board.width / RETINA_FACTOR) / 3 * OFFSET_DEF_ZOOM
@@ -225,11 +211,10 @@ def main():
     boardCoord = [[(coord / RETINA_FACTOR) for coord in sublist]
                   for sublist in boardCoord]
 
-    for i in range(0, 6):
-        time.sleep(2)
+    while 1:
         m = bestMove(getBoard(boardWithFactor))
         ag.click(boardCoord[m][0], boardCoord[m][1])
-        time.sleep(2)
+        time.sleep(1.2)
 
     sys.exit(0)
 
